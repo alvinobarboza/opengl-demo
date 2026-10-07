@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 4.2)
 project(opengl_demo)
 
 set(CMAKE_CXX_STANDARD 20)
-
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # 1. Configure GLFW options before adding its subdirectory
@@ -24,7 +23,18 @@ target_include_directories(glad PUBLIC deps/glad/include)
 find_package(OpenGL REQUIRED)
 
 # 4. Define your main executable project
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp
+        include/shader.h
+        src/shader.cpp
+        include/VBO.h
+        src/VBO.cpp
+        include/EBO.h
+        src/EBO.cpp
+        include/VAO.h
+        src/VAO.cpp)
+
+target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Werror -Wpedantic -Wextra)
+target_include_directories(${PROJECT_NAME} PRIVATE include)
 
 # 5. Link libraries and include headers for your main project
 target_link_libraries(${PROJECT_NAME} PRIVATE glad glfw OpenGL::GL)
