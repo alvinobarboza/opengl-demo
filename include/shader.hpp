@@ -16,4 +16,7 @@ public:
 
     void activate_shader() const ;
     void delete_shader() const ;
+
+private:
+    static void compile_errors(unsigned int shader, const std::string& type);
 };
