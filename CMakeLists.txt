@@ -24,13 +24,13 @@ find_package(OpenGL REQUIRED)
 
 # 4. Define your main executable project
 add_executable(${PROJECT_NAME} src/main.cpp
-        include/shader.h
+        include/shader.hpp
         src/shader.cpp
-        include/VBO.h
+        include/VBO.hpp
         src/VBO.cpp
-        include/EBO.h
+        include/EBO.hpp
         src/EBO.cpp
-        include/VAO.h
+        include/VAO.hpp
         src/VAO.cpp)
 
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Werror -Wpedantic -Wextra)

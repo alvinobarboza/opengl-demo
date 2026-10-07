@@ -3,10 +3,10 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-#include "shader.h"
-#include "VAO.h"
-#include "VBO.h"
-#include "EBO.h"
+#include "shader.hpp"
+#include "VAO.hpp"
+#include "VBO.hpp"
+#include "EBO.hpp"
 
 GLfloat vertices[] = {
     -0.5f, -0.5f * std::sqrt(3.0f) / 3.0f, 0.0f,            // Lower left corner
