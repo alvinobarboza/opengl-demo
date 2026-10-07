@@ -46,13 +46,13 @@ int main() {
 
     // Shader setup
 
-    Shader shader_program {"../shader/default.vert", "../shader/default.frag"};
+    const Shader shader_program {"../shader/default.vert", "../shader/default.frag"};
 
-    VAO VAO1;
+    const VAO VAO1;
     VAO1.bind_vao();
 
-    VBO VBO1{vertices, sizeof(vertices)};
-    EBO EBO1{indices, sizeof(indices)};
+    const VBO VBO1{vertices, sizeof(vertices)};
+    const EBO EBO1{indices, sizeof(indices)};
 
     VAO1.link_vbo(VBO1, 0);
     VAO1.unbind_vao();
@@ -67,7 +67,7 @@ int main() {
         shader_program.activate_shader();
         VAO1.bind_vao();
 
-        glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, nullptr);
         glfwSwapBuffers(window);
 
         glfwPollEvents();

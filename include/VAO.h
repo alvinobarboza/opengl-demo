@@ -9,7 +9,7 @@ public:
 
     VAO();
 
-    static void link_vbo(VBO& VBO, GLuint layout) ;
+    static void link_vbo(const VBO& VBO, GLuint layout) ;
     void bind_vao() const ;
     static void unbind_vao() ;
     void delete_vao() const;
