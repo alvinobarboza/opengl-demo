@@ -22,6 +22,10 @@ target_include_directories(glad PUBLIC deps/glad/include)
 # 3. Find system OpenGL
 find_package(OpenGL REQUIRED)
 
+add_library(stb_image INTERFACE)
+target_include_directories(stb_image INTERFACE deps/stb)
+
+
 # 4. Define your main executable project
 add_executable(${PROJECT_NAME} src/main.cpp
         include/shader.hpp
@@ -31,10 +35,14 @@ add_executable(${PROJECT_NAME} src/main.cpp
         include/EBO.hpp
         src/EBO.cpp
         include/VAO.hpp
-        src/VAO.cpp)
+        src/VAO.cpp
+        src/stb_image_impl.cpp
+        include/texture.h
+        src/texture.cpp
+)
 
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Werror -Wpedantic -Wextra)
 target_include_directories(${PROJECT_NAME} PRIVATE include)
 
 # 5. Link libraries and include headers for your main project
-target_link_libraries(${PROJECT_NAME} PRIVATE glad glfw OpenGL::GL)
+target_link_libraries(${PROJECT_NAME} PRIVATE glad glfw OpenGL::GL stb_image)
