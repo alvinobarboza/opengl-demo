@@ -1,6 +1,7 @@
 #include <cmath>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 #include <iostream>
 
 #include "texture.h"
@@ -45,7 +46,7 @@ int main() {
 
     // Shader setup
 
-    const Shader shader_program {"../shader/default.vert", "../shader/default.frag"};
+    const Shader shader_program {"shader/default.vert", "shader/default.frag"};
 
     const VAO VAO1;
     VAO1.bind_vao();
@@ -64,7 +65,7 @@ int main() {
 
     // Texture
 
-    Texture checker{"../assets/uv_checker.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE};
+    Texture checker{"assets/uv_checker.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE};
     checker.tex_unit(shader_program, "tex0", 0);
     // end texture
 
