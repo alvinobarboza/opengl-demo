@@ -18,7 +18,7 @@ public:
         GLenum format,
         GLenum pixel_type);
 
-    void tex_unit(Shader shader, const std::string& uniform, GLuint unit) const;
+    void tex_unit(const Shader& shader, const std::string& uniform, GLuint unit) const;
     void bind_tex() const;
     void unbind_tex() const;
     void delete_tex() const;

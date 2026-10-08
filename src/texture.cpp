@@ -39,7 +39,7 @@ Texture::Texture(
 }
 
 void Texture::tex_unit(
-    const Shader shader,
+    const Shader& shader,
     const std::string &uniform,
     const GLuint unit) const
 {
