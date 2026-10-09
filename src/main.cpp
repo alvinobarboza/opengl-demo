@@ -56,7 +56,7 @@ int main() {
 
     VAO1.link_attrib(VBO1, 0, 3, GL_FLOAT, 8 * sizeof(float), nullptr);
     VAO1.link_attrib(VBO1, 1, 3, GL_FLOAT, 8 * sizeof(float), reinterpret_cast<void *>(3 * sizeof(float)));
-    VAO1.link_attrib(VBO1, 2, 3, GL_FLOAT, 8 * sizeof(float), reinterpret_cast<void *>(6 * sizeof(float)));
+    VAO1.link_attrib(VBO1, 2, 2, GL_FLOAT, 8 * sizeof(float), reinterpret_cast<void *>(6 * sizeof(float)));
     VAO1.unbind_vao();
     VBO1.unbind_vbo();
     EBO1.unbind_ebo();
