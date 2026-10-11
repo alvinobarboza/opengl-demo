@@ -9,13 +9,11 @@ out vec2 texCoord;
 
 uniform float scale;
 
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 proj;
+uniform mat4 camera_matrix;
 
 void main()
 {
-   gl_Position = proj * view * model * vec4(aPos, 1.0);
+   gl_Position = camera_matrix * vec4(aPos, 1.0);
    color = aColor;
    texCoord = aTex;
 }

@@ -40,6 +40,8 @@ add_executable(${PROJECT_NAME}
         src/VAO.cpp
         include/texture.h
         src/texture.cpp
+        include/camera.hpp
+        src/camera.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE include)

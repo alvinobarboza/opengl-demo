@@ -11,6 +11,7 @@
 #include "VAO.hpp"
 #include "VBO.hpp"
 #include "EBO.hpp"
+#include "camera.hpp"
 
 // Vertices coordinates
 GLfloat vertices[] =
@@ -74,18 +75,15 @@ int main() {
     VBO1.unbind_vbo();
     EBO1.unbind_ebo();
 
-    const GLuint uni_id = glGetUniformLocation(shader_program.ID, "scale");
-
     // Texture
 
     Texture checker{"assets/uv_checker.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE};
     checker.tex_unit(shader_program, "tex0", 0);
     // end texture
 
-    float rotation = 0.0f;
-    double prev_time = glfwGetTime();
-
     glEnable(GL_DEPTH_TEST);
+
+    Camera camera {WIDTH, HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f)};
 
     while (!glfwWindowShouldClose(window))
     {
@@ -93,30 +91,9 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         shader_program.activate_shader();
 
-        const double current_time = glfwGetTime();
-        if (current_time - prev_time >= 1.0 / 60.0f)
-        {
-            rotation += 0.5f;
-            prev_time = current_time;
-        }
+        camera.input(window);
+        camera.matrix(45.0f, 0.1f, 100.0f, shader_program, "camera_matrix");
 
-        auto model = glm::mat4(1.0f);
-        auto view = glm::mat4(1.0f);
-        auto proj = glm::mat4(1.0f);
-
-        model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f));
-        view = glm::translate(view, glm::vec3(0.0f, -0.5f, -2.0f));
-        proj = glm::perspective(glm::radians(45.0f), (static_cast<float>(WIDTH)/HEIGHT), .1f, 100.0f);
-
-        const int model_loc = glGetUniformLocation(shader_program.ID, "model");
-        const int view_loc = glGetUniformLocation(shader_program.ID, "view");
-        const int proj_loc = glGetUniformLocation(shader_program.ID, "proj");
-
-        glUniformMatrix4fv(model_loc, 1, GL_FALSE, glm::value_ptr(model));
-        glUniformMatrix4fv(view_loc, 1, GL_FALSE, glm::value_ptr(view));
-        glUniformMatrix4fv(proj_loc, 1, GL_FALSE, glm::value_ptr(proj));
-
-        glUniform1f(uni_id, 0.5f);
         checker.bind_tex();
 
         VAO1.bind_vao();
