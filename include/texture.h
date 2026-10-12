@@ -10,15 +10,16 @@ class Texture {
 public:
     GLuint ID{};
     GLenum type;
+    GLuint unit;
 
     Texture(
         const std::string& image,
         GLenum tex_type,
-        GLenum slot,
+        GLuint slot,
         GLenum format,
         GLenum pixel_type);
 
-    void tex_unit(const Shader& shader, const std::string& uniform, GLuint unit) const;
+    void tex_unit(const Shader& shader, const std::string& uniform, GLuint _unit) const;
     void bind_tex() const;
     void unbind_tex() const;
     void delete_tex() const;

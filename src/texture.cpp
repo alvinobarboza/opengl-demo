@@ -3,9 +3,9 @@
 Texture::Texture(
     const std::string &image,
     const GLenum tex_type,
-    const GLenum slot,
+    const GLuint slot,
     const GLenum format,
-    const GLenum pixel_type): type(tex_type)
+    const GLenum pixel_type): type(tex_type), unit(slot)
 {
     int width_tex, height_tex, channels_tex;
     stbi_set_flip_vertically_on_load(true);
@@ -17,7 +17,7 @@ Texture::Texture(
         0);
 
     glGenTextures(1, &ID);
-    glActiveTexture(slot);
+    glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(type, ID);
 
     glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -41,15 +41,16 @@ Texture::Texture(
 void Texture::tex_unit(
     const Shader& shader,
     const std::string &uniform,
-    const GLuint unit) const
+    const GLuint _unit) const
 {
-    const GLuint tex0uni = glGetUniformLocation(shader.ID, uniform.c_str());
+    const GLuint tex_uni = glGetUniformLocation(shader.ID, uniform.c_str());
     shader.activate_shader();
-    glUniform1i(tex0uni, unit);
+    glUniform1i(tex_uni, _unit);
 }
 
 void Texture::bind_tex() const
 {
+    glActiveTexture(GL_TEXTURE0 + unit);
     glBindTexture(type, ID);
 }
 
