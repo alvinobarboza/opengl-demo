@@ -6,11 +6,10 @@ width(width),
 height(height)
 {}
 
-void Camera::matrix(
+void Camera::update_matrix(
     const float fov_deg,
     const float near_plane,
-    const float far_plane,
-    const Shader &shader, const std::string& uniform_name) const {
+    const float far_plane) {
     glm::mat4 view {1.0f};
     glm::mat4 projection {1.0f};
 
@@ -21,9 +20,13 @@ void Camera::matrix(
         near_plane,
         far_plane);
 
+    camera_matrix = projection * view;
+}
+
+void Camera::matrix(const Shader &shader, const std::string& uniform_name) const {
     glUniformMatrix4fv(
         glGetUniformLocation(shader.ID, uniform_name.c_str()),
-        1, GL_FALSE, glm::value_ptr(projection * view));
+        1, GL_FALSE, glm::value_ptr(camera_matrix));
 }
 
 void Camera::input(GLFWwindow *window)
@@ -87,7 +90,6 @@ void Camera::input(GLFWwindow *window)
         double mouse_y {};
         glfwGetCursorPos(window, &mouse_x, &mouse_y);
 
-        std::cout << "mouse_x: " << mouse_x << " mouse_y: " << mouse_y << '\n';
         const float rot_x = sensitivity * static_cast<float>(mouse_y - (f_height / 2.0f)) / f_height;
         const float rot_y = sensitivity * static_cast<float>(mouse_x - (f_width / 2.0f)) / f_width;
 

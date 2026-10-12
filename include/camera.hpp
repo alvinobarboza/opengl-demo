@@ -18,6 +18,7 @@ public:
     glm::vec3 position{0.0f, 0.0f, 0.0f};
     glm::vec3 orientation{0.0f, 0.0f, -1.0f};
     glm::vec3 up{0.0f, 1.0f, 0.0f};
+    glm::mat4 camera_matrix {1.0f};
 
     int width{800};
     int height{800};
@@ -30,6 +31,7 @@ public:
 
     Camera(int width, int height, glm::vec3 position);
 
-    void matrix(float fov_deg, float near_plane, float far_plane, const Shader& shader, const std::string& uniform_name) const;
+    void update_matrix(float fov_deg, float near_plane, float far_plane);
+    void matrix(const Shader& shader, const std::string& uniform_name) const;
     void input(GLFWwindow* window);
 };

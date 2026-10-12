@@ -92,7 +92,8 @@ int main() {
         shader_program.activate_shader();
 
         camera.input(window);
-        camera.matrix(45.0f, 0.1f, 100.0f, shader_program, "camera_matrix");
+        camera.update_matrix(45.0f, 0.1f, 100.0f);
+        camera.matrix(shader_program, "camera_matrix");
 
         checker.bind_tex();
 
