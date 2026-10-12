@@ -22,10 +22,11 @@ public:
     int width{800};
     int height{800};
 
-    bool first_click{true};
+    bool lock_was_pressed{false};
+    bool lock_camera{false};
 
     float speed {0.01f};
-    float sensitivity {10.0f};
+    float sensitivity {100.0f};
 
     Camera(int width, int height, glm::vec3 position);
 

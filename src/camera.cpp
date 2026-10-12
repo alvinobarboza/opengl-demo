@@ -60,23 +60,34 @@ void Camera::input(GLFWwindow *window)
         speed = 0.01f;
     }
 
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+    const bool lock_pressed {glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS};
+    const bool lock_action {lock_pressed && !lock_was_pressed};
+    lock_was_pressed = lock_pressed;
+    if (lock_action)
     {
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+        if (!lock_camera)
+        {
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            const auto f_width {static_cast<float>(width)};
+            const auto f_height {static_cast<float>(height)};
+            lock_camera = true;
+            glfwSetCursorPos(window, f_width / 2, f_height / 2);
+        } else
+        {
+            lock_camera = false;
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        }
+    }
 
+    if (lock_camera)
+    {
         const auto f_width {static_cast<float>(width)};
         const auto f_height {static_cast<float>(height)};
-
-        if (first_click)
-        {
-            first_click = false;
-            glfwSetCursorPos(window, f_width / 2, f_height / 2);
-        }
-
         double mouse_x {};
         double mouse_y {};
         glfwGetCursorPos(window, &mouse_x, &mouse_y);
 
+        std::cout << "mouse_x: " << mouse_x << " mouse_y: " << mouse_y << '\n';
         const float rot_x = sensitivity * static_cast<float>(mouse_y - (f_height / 2.0f)) / f_height;
         const float rot_y = sensitivity * static_cast<float>(mouse_x - (f_width / 2.0f)) / f_width;
 
@@ -89,10 +100,5 @@ void Camera::input(GLFWwindow *window)
         orientation = glm::rotate(orientation, glm::radians(-rot_y), up);
 
         glfwSetCursorPos(window, f_width / 2, f_height / 2);
-    } else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
-    {
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-
-        first_click = true;
     }
 }
