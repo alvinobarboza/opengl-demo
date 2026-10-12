@@ -60,9 +60,12 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 )
 
 # 7. Copy runtime dependencies
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+add_custom_target(copy_assets
         COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/shader $<TARGET_FILE_DIR:${PROJECT_NAME}>/shader
+        "${CMAKE_SOURCE_DIR}/shader" "$<TARGET_FILE_DIR:${PROJECT_NAME}>/shader"
         COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:${PROJECT_NAME}>/assets
+        "${CMAKE_SOURCE_DIR}/assets" "$<TARGET_FILE_DIR:${PROJECT_NAME}>/assets"
+        COMMENT "Syncing shaders and assets"
 )
+
+add_dependencies(${PROJECT_NAME} copy_assets)
