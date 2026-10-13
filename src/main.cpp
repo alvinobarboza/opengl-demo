@@ -180,9 +180,13 @@ int main() {
         }
     }
     VAO1.delete_vao();
+    light_VAO.delete_vao();
     VBO1.delete_vbo();
+    light_VBO.delete_vbo();
     EBO1.delete_ebo();
+    light_EBO.delete_ebo();
     shader_program.delete_shader();
+    light_shader.delete_shader();
     checker.delete_tex();
 
     glfwDestroyWindow(window);
