@@ -173,6 +173,11 @@ int main() {
         glfwSwapBuffers(window);
 
         glfwPollEvents();
+
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        {
+            glfwSetWindowShouldClose(window, GLFW_TRUE);
+        }
     }
     VAO1.delete_vao();
     VBO1.delete_vbo();
