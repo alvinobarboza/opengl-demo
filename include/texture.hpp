@@ -9,12 +9,12 @@
 class Texture {
 public:
     GLuint ID{};
-    GLenum type;
+    const std::string type;
     GLuint unit;
 
     Texture(
         const std::string& image,
-        GLenum tex_type,
+        const std::string& tex_type,
         GLuint slot,
         GLenum format,
         GLenum pixel_type);

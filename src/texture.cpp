@@ -1,8 +1,8 @@
-#include "texture.h"
+#include "texture.hpp"
 
 Texture::Texture(
     const std::string &image,
-    const GLenum tex_type,
+    const std::string& tex_type,
     const GLuint slot,
     const GLenum format,
     const GLenum pixel_type): type(tex_type), unit(slot)
@@ -18,24 +18,24 @@ Texture::Texture(
 
     glGenTextures(1, &ID);
     glActiveTexture(GL_TEXTURE0 + slot);
-    glBindTexture(type, ID);
+    glBindTexture(GL_TEXTURE_2D, ID);
 
-    glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     glTexImage2D(
-        type, 0,
+        GL_TEXTURE_2D, 0,
         GL_RGBA,
         width_tex,
         height_tex, 0,
         format, pixel_type, bytes);
-    glGenerateMipmap(type);
+    glGenerateMipmap(GL_TEXTURE_2D);
 
     stbi_image_free(bytes);
-    glBindTexture(type, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Texture::tex_unit(
@@ -51,12 +51,12 @@ void Texture::tex_unit(
 void Texture::bind_tex() const
 {
     glActiveTexture(GL_TEXTURE0 + unit);
-    glBindTexture(type, ID);
+    glBindTexture(GL_TEXTURE_2D, ID);
 }
 
 void Texture::unbind_tex() const
 {
-    glBindTexture(type, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Texture::delete_tex() const

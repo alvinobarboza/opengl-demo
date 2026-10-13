@@ -1,25 +1,13 @@
-#include <cmath>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <iostream>
 
-#include "texture.h"
-#include "shader.hpp"
-#include "VAO.hpp"
-#include "VBO.hpp"
-#include "EBO.hpp"
-#include "camera.hpp"
+#include "mesh.hpp"
 
 // Vertices coordinates
-GLfloat vertices[] =
-{ //     COORDINATES     /        COLORS        /    TexCoord    /       NORMALS     //
-    -1.0f, 0.0f,  1.0f,		0.0f, 0.0f, 0.0f,		0.0f, 0.0f,		0.0f, 1.0f, 0.0f,
-    -1.0f, 0.0f, -1.0f,		0.0f, 0.0f, 0.0f,		0.0f, 1.0f,		0.0f, 1.0f, 0.0f,
-     1.0f, 0.0f, -1.0f,		0.0f, 0.0f, 0.0f,		1.0f, 1.0f,		0.0f, 1.0f, 0.0f,
-     1.0f, 0.0f,  1.0f,		0.0f, 0.0f, 0.0f,		1.0f, 0.0f,		0.0f, 1.0f, 0.0f
+Vertex vertices[] =
+{ //               COORDINATES           /            COLORS          /           NORMALS         /       TEXTURE COORDINATES    //
+    Vertex{glm::vec3(-1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f)},
+    Vertex{glm::vec3(-1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
+    Vertex{glm::vec3( 1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
+    Vertex{glm::vec3( 1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f)}
 };
 
 // Indices for vertices order
@@ -29,18 +17,20 @@ GLuint indices[] =
     0, 2, 3
 };
 
-GLfloat light_vertices[] = {
-    -0.1f, -0.1f,  0.1f,
-    -0.1f, -0.1f, -0.1f,
-     0.1f, -0.1f, -0.1f,
-     0.1f, -0.1f,  0.1f,
-    -0.1f,  0.1f,  0.1f,
-    -0.1f,  0.1f, -0.1f,
-     0.1f,  0.1f, -0.1f,
-     0.1f,  0.1f,  0.1f,
+Vertex light_vertices[] =
+{ //     COORDINATES     //
+    Vertex{glm::vec3(-0.1f, -0.1f,  0.1f),{},{},{}},
+    Vertex{glm::vec3(-0.1f, -0.1f, -0.1f),{},{},{}},
+    Vertex{glm::vec3(0.1f, -0.1f, -0.1f),{},{},{}},
+    Vertex{glm::vec3(0.1f, -0.1f,  0.1f),{},{},{}},
+    Vertex{glm::vec3(-0.1f,  0.1f,  0.1f),{},{},{}},
+    Vertex{glm::vec3(-0.1f,  0.1f, -0.1f),{},{},{}},
+    Vertex{glm::vec3(0.1f,  0.1f, -0.1f),{},{},{}},
+    Vertex{glm::vec3(0.1f,  0.1f,  0.1f), {},{},{}}
 };
 
-GLuint light_indices[] = {
+GLuint light_indices[] =
+{
     0, 1, 2,
     0, 2, 3,
     0, 4, 7,
@@ -79,39 +69,24 @@ int main() {
 
     glViewport(0,0, WIDTH,HEIGHT);
 
+    // Texture
+
+    Texture textures [] {
+        Texture("assets/uv_checker.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+        Texture("assets/uv_checker_specular.png", "specular", 1, GL_RGBA, GL_UNSIGNED_BYTE)
+    };// end texture
+
     // Shader setup
 
     const Shader shader_program {"shader/default.vert", "shader/default.frag"};
 
-    const VAO VAO1;
-    VAO1.bind_vao();
-
-    const VBO VBO1{vertices, sizeof(vertices)};
-    const EBO EBO1{indices, sizeof(indices)};
-
-    VAO1.link_attrib(VBO1, 0, 3, GL_FLOAT, 11 * sizeof(float), nullptr);
-    VAO1.link_attrib(VBO1, 1, 3, GL_FLOAT, 11 * sizeof(float), reinterpret_cast<void *>(3 * sizeof(float)));
-    VAO1.link_attrib(VBO1, 2, 2, GL_FLOAT, 11 * sizeof(float), reinterpret_cast<void *>(6 * sizeof(float)));
-    VAO1.link_attrib(VBO1, 3, 3, GL_FLOAT, 11 * sizeof(float), reinterpret_cast<void *>(8 * sizeof(float)));
-    VAO1.unbind_vao();
-    VBO1.unbind_vbo();
-    EBO1.unbind_ebo();
+    Mesh floor(vertices, indices, textures);
 
     // Light shader
 
     Shader light_shader {"shader/light.vert", "shader/light.frag"};
 
-    const VAO light_VAO;
-    light_VAO.bind_vao();
-
-    const VBO light_VBO{light_vertices, sizeof(light_vertices)};
-    const EBO light_EBO{light_indices, sizeof(light_indices)};
-
-    light_VAO.link_attrib(light_VBO, 0, 3, GL_FLOAT, 3 * sizeof(float), reinterpret_cast<void *>(0));
-
-    light_VAO.unbind_vao();
-    light_VBO.unbind_vbo();
-    light_EBO.unbind_ebo();
+    Mesh light(light_vertices, light_indices, textures);
 
     glm::vec4 light_color {1.0f, 1.0f, 1.0f, 1.0f};
 
@@ -132,14 +107,7 @@ int main() {
     glUniform4f(glGetUniformLocation(shader_program.ID, "light_color"), light_color.x, light_color.y, light_color.z, light_color.w);
     glUniform3f(glGetUniformLocation(shader_program.ID, "light_pos"), light_pos.x, light_pos.y, light_pos.z);
 
-    // Texture
 
-    Texture checker{"assets/uv_checker.png", GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE};
-    checker.tex_unit(shader_program, "tex0", 0);
-
-    Texture checker_spec{"assets/uv_checker_specular.png", GL_TEXTURE_2D, 1, GL_RGBA, GL_UNSIGNED_BYTE};
-    checker_spec.tex_unit(shader_program, "tex1", 1);
-    // end texture
 
     glEnable(GL_DEPTH_TEST);
 
@@ -153,22 +121,8 @@ int main() {
         camera.input(window);
         camera.update_matrix(45.0f, 0.1f, 100.0f);
 
-        shader_program.activate_shader();
-
-        glUniform3f(glGetUniformLocation(shader_program.ID, "cam_pos"), camera.position.x, camera.position.y, camera.position.z);
-        camera.matrix(shader_program, "camera_matrix");
-
-        checker.bind_tex();
-        checker_spec.bind_tex();
-
-        VAO1.bind_vao();
-
-        glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(int), GL_UNSIGNED_INT, nullptr);
-
-        light_shader.activate_shader();
-        camera.matrix(light_shader, "camera_matrix");
-        light_VAO.bind_vao();
-        glDrawElements(GL_TRIANGLES, sizeof(light_indices)/sizeof(int), GL_UNSIGNED_INT, nullptr);
+        floor.draw(shader_program, camera);
+        light.draw(light_shader, camera);
 
         glfwSwapBuffers(window);
 
@@ -179,15 +133,8 @@ int main() {
             glfwSetWindowShouldClose(window, GLFW_TRUE);
         }
     }
-    VAO1.delete_vao();
-    light_VAO.delete_vao();
-    VBO1.delete_vbo();
-    light_VBO.delete_vbo();
-    EBO1.delete_ebo();
-    light_EBO.delete_ebo();
     shader_program.delete_shader();
     light_shader.delete_shader();
-    checker.delete_tex();
 
     glfwDestroyWindow(window);
     glfwTerminate();

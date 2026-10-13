@@ -38,10 +38,12 @@ add_executable(${PROJECT_NAME}
         src/EBO.cpp
         include/VAO.hpp
         src/VAO.cpp
-        include/texture.h
+        include/texture.hpp
         src/texture.cpp
         include/camera.hpp
         src/camera.cpp
+        include/mesh.hpp
+        src/mesh.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE include)
