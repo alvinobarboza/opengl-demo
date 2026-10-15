@@ -151,7 +151,7 @@ int main() {
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         } else if (changed)
         {
-            glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         }
     }
     shader_program.delete_shader();
