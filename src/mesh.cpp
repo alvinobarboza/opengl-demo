@@ -12,10 +12,10 @@ textures(textures.begin(), textures.end())
     const VBO vbo {this->vertices};
     const EBO ebo {this->indices};
 
-    vao.link_attrib(vbo, 0, 3, GL_FLOAT, 11 * sizeof(Vertex), nullptr);
-    vao.link_attrib(vbo, 1, 3, GL_FLOAT, 11 * sizeof(Vertex), reinterpret_cast<void *>(3 * sizeof(float)));
-    vao.link_attrib(vbo, 2, 3, GL_FLOAT, 11 * sizeof(Vertex), reinterpret_cast<void *>(6 * sizeof(float)));
-    vao.link_attrib(vbo, 3, 2, GL_FLOAT, 11 * sizeof(Vertex), reinterpret_cast<void *>(9 * sizeof(float)));
+    vao.link_attrib(vbo, 0, 3, GL_FLOAT, sizeof(Vertex), nullptr);
+    vao.link_attrib(vbo, 1, 3, GL_FLOAT, sizeof(Vertex), reinterpret_cast<void *>(3 * sizeof(float)));
+    vao.link_attrib(vbo, 2, 3, GL_FLOAT, sizeof(Vertex), reinterpret_cast<void *>(6 * sizeof(float)));
+    vao.link_attrib(vbo, 3, 2, GL_FLOAT, sizeof(Vertex), reinterpret_cast<void *>(9 * sizeof(float)));
 
     vao.unbind_vao();
     vbo.unbind_vbo();
