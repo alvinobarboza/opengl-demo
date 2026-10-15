@@ -111,8 +111,10 @@ int main() {
 
     glEnable(GL_DEPTH_TEST);
 
-    Camera camera {WIDTH, HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f)};
+    Camera camera {WIDTH, HEIGHT, glm::vec3(0.0f, 0.2f, 2.0f)};
 
+    bool draw_wire {false};
+    bool draw_wire_pressed {false};
     while (!glfwWindowShouldClose(window))
     {
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
@@ -131,6 +133,25 @@ int main() {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         {
             glfwSetWindowShouldClose(window, GLFW_TRUE);
+        }
+
+        bool draw_wire_press {glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS};
+        bool toggle_wire {draw_wire_press && !draw_wire_pressed};
+        draw_wire_pressed = draw_wire_press;
+        bool changed = false;
+        if (toggle_wire)
+        {
+            draw_wire = !draw_wire;
+            changed = true;
+        }
+
+
+        if (changed && !draw_wire)
+        {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        } else if (changed)
+        {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
         }
     }
     shader_program.delete_shader();
